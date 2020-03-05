@@ -1,5 +1,7 @@
 # spec-debug
 
+[![Clojars Project](https://img.shields.io/clojars/v/otwieracz/spec-debug.svg)](https://clojars.org/otwieracz/spec-debug)
+
 Debug helper which I've been always missing - minimal helper for instrumenting `(clojure.spec.alpha/valid?)` with more verbose output.
 
 This should be treated as **debug facility** and not be enabled on production by default - especially, when there are `spec/valid?` statements expected to fail non-catastrophically used in performace-sensitive parts of code.
