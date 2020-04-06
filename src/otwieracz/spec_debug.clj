@@ -1,7 +1,7 @@
 (ns otwieracz.spec-debug
   (:require [clojure.spec.alpha :as spec]
-            [expound.alpha :refer [expound]]
-            [clojure.tools.logging :as log]))
+            [expound.alpha :as expound]
+            [taoensso.timbre :as log]))
 
 (def ^:private original-spec-valid? clojure.spec.alpha/valid?)
 
@@ -12,13 +12,19 @@
    (fn [& args]
      (or (apply valid?-fn args)
          (try
-           (let [message (with-out-str
-                           (expound (first args) (second args)
-                                    (merge +expound-defaults+
-                                           (:expound-options options))))
+           ;; we could easily use three-argument `explain-str` here, but
+           ;; it's only present in most recent verisons of `expound` library.
+           ;; defining custom printer gives us a bit of backward compatibility
+           ;; 
+           ;; in worst case exception will be thrown and catched without any
+           ;; side effects
+           (let [printer (expound/custom-printer +expound-defaults+)
+                 explain-data (spec/explain-data (first args) (second args))
+                 message (with-out-str (printer explain-data))
                  log-fn  (get options
                               :log-fn
-                              (fn [message] (log/error message)))]
+                              (fn [message] (str "clojure.spec.alpha validation error:\n"
+                                                 (log/error message))))]
              (when log-fn
                (log-fn message))
              false)
