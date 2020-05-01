@@ -1,4 +1,4 @@
-(defproject otwieracz/spec-debug "0.1.0"
+(defproject otwieracz/spec-debug "0.1.1"
   :description "Minimal helper for instrumenting `(clojure.spec.alpha/valid?) `with more verbose output."
   :url "https://github.com/otwieracz/spec-debug"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
